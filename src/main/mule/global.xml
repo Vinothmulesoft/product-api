@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="eda39723-3500-4a53-9d63-e20f761b5138" basePath="/hello" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+
+	<configuration-properties doc:name="Configuration properties" doc:id="f311de10-7910-4d89-ba33-fc0d4212d689" file="dev.properties" />
+	<flow name="simplehttpappFlow" doc:id="10fbd9b5-975f-4354-b22c-95131191693e" >
+		<http:listener doc:name="Listener" doc:id="5edc0587-05aa-49d0-8e48-ec33a9b3d1ee" config-ref="HTTP_Listener_config" path="/hello1"/>
+		<logger level="INFO" doc:name="Start log" doc:id="8e54b863-0cc6-42f7-b11f-58834f3bb858" message="Started" />
+		<logger level="INFO" doc:name="End log" doc:id="27232d25-99c6-47cb-bd94-8b0e4a871724" message="Ended" />
+	</flow>
+	<flow name="validation-demoFlow" doc:id="fb4347f4-3ec5-4350-8c4e-1dcef1f4beff" >
+		<http:listener doc:name="Listener" doc:id="0494b02d-d3df-41c5-ab46-bef6cf81096f" config-ref="HTTP_Listener_config" allowedMethods="POST" path="Validation">
+			<http:error-response >
+				<http:body ><![CDATA[#[output text/plain --- error.errormessage.payload.message[0]]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<logger level="INFO" doc:name="Start log" doc:id="dbf003c6-3784-4320-9c98-275c45cd2e08" message="Started"/>
+		<validation:all doc:name="All" doc:id="18f92712-f519-4e31-ad41-da9cd68d7761" >
+			<validation:is-not-null doc:name="Is not null" doc:id="69007b6f-c811-4037-941f-a0d723f34ea5" value="#[payload.source]" message='#["Source is required"]' />
+			<validation:is-email doc:name="Is email" doc:id="76bd2aa0-c5f0-47e3-9540-42fc54c87bc5" email="#[payload.email]" message='#["Invalid Email"]' />
+			<validation:matches-regex doc:name="Matches regex" doc:id="b053c391-de87-4ada-ae62-8015532455a0" value="#[payload.dateOfBirth]" regex='#["([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))"]' caseSensitive="false" message='#["Invalid Date format for Date of birth YYYY-MM-DD"]' />
+		</validation:all>
+	</flow>
+</mule>
