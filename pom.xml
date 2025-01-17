@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mycompany</groupId>
-	<artifactId>simplehttpapp</artifactId>
+	<artifactId>product-apiv1</artifactId>
 	<version>1.0.0</version>
 	<packaging>mule-application</packaging>
 
-	<name>simplehttpapp</name>
+	<name>product-apiv1</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -31,12 +31,6 @@
 				<extensions>true</extensions>
 				<configuration>
 					<classifier>---- select project type ----</classifier>
-					<sharedLibraries>
-						<sharedLibrary>
-							<groupId>com.mycompany</groupId>
-							<artifactId>ojdbc6</artifactId>
-						</sharedLibrary>
-					</sharedLibraries>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -56,15 +50,10 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>org.mule.connectors</groupId>
-			<artifactId>mule-db-connector</artifactId>
-			<version>1.14.12</version>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-apikit-module</artifactId>
+			<version>1.11.1</version>
 			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
-			<groupId>com.mycompany</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>0.1</version>
 		</dependency>
 	</dependencies>
 
